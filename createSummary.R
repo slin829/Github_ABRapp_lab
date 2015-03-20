@@ -14,12 +14,23 @@ createSummary <- function( refData, newData = "NULL" ){
   # init
   #
   availf = c("clicks", "4k","8k", "12k","16k","20k","24k","28k");
+  refFolder = "./ABR_standards/";
   
   for( freq in availf ){
+    
+    var = dir(paste0(refFolder, system));
+    var= as.vector(var);
+    # TODO: create a funciton to load data in a standard way.
     
     #
     # Load the reference data set
     #
+    
+    #check if the frequence exits in the reference folder
+    if( !(paste0(freq,".csv")) %in% dir(paste("./ABR_standards/", refData, "/")) ){
+      # TODO: add freq in freqProb?
+      next
+    }
     
     #
     # Load the data set to compare with
