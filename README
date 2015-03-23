@@ -1,0 +1,7 @@
+A simple interface to interact with ABR data. It provides a way to compare a new data to standard and expected values.
+
+How to run: server.R is the startup file.
+
+
+Authors: Shelly Lin and Jerome Plumat
+
