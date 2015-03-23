@@ -1,13 +1,13 @@
 #
 # latfit 
 # function(freq, ID, dataFolder,refFolder)
-# creates 95% confidence and prediction interval for  I latency vs sound intensity base on the system (e.g. TDT system used and animal model)
+# creates 95% confidence and prediction interval for wave I latency vs sound intensity base on the system (e.g. TDT system used and animal model)
 # ID = plots animal ID of interest in red
 # dataFolder = data folder within ABR_ID (for ID plot)
 # refFolder = reference folder within ABR standards (for interval calc)
-#
+# points = T/F toggles the reference data points on/off
 
-latfit <- function(freq, ID="NULL", dataFolder, refFolder){
+latfit <- function(freq, ID="NULL", dataFolder, refFolder,  ymin= 0, ymax= 8, points="TRUE"){
   library(ggplot2)
   availFreq = c("clicks", "4k","8k", "12k","16k","20k","24k","28k")
   final_f=paste(availFreq, "_f", sep="")
@@ -50,7 +50,7 @@ latfit <- function(freq, ID="NULL", dataFolder, refFolder){
       geom_ribbon(aes(ymin=lwr, ymax=upr, fill="prediction"), data=MyPreds, alpha=0.2) + # include pred. intervals
       scale_fill_manual('Interval', values = c('green', 'blue')) +  #set colours
       labs(title= freq) +
-      scale_y_continuous(limits=c(0,8),name="Latency (ms)") + #set y axis
+      scale_y_continuous(limits=c(ymin,ymax), breaks= c(seq(ymin, ymax, by=2)), name="Latency (ms)") + #set y axis
       scale_x_continuous(limits=c(0,90), breaks=c(seq(0, 90, by=20)),name="Sound level (dB)") + #set x axis
       # set font size
       theme(axis.title=element_text(size=20, face="bold"),
@@ -65,12 +65,16 @@ latfit <- function(freq, ID="NULL", dataFolder, refFolder){
   if(!is.null(ID)){
     IDdata <- read.csv(paste("./ABR_ID/", dataFolder,"/", ID,"/",freq,".csv", sep=""))
   }  
+  # plots ref data points if points = TRUE
+  if(points==TRUE){
+    my_plot <- my_plot + geom_point(size=3) 
+  }
   # plots ID of interest if ID is !NULL
   if(!is.null(ID)){ 
-    my_plot <- my_plot + geom_point(size=3) +  
+    my_plot <- my_plot +  
       geom_point(data= IDdata,aes(Level.dB., T1.ms.), size=3, colour="red") 
   }
-  
+
   # output plot
   my_plot
   

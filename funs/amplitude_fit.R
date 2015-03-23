@@ -5,9 +5,10 @@
 # ID = plots animal ID of interest in red
 # dataFolder = data folder within ABR_ID (for ID plot)
 # refFolder = reference folder within ABR standards (for interval calc)
-#
+# points = T/F toggles the reference data points on/off
 
-ampfit <- function(freq, ID = "NULL", dataFolder ,refFolder){
+
+ampfit <- function(freq, ID = "NULL", dataFolder , refFolder,  ymin, ymax, points="TRUE"){
   library(ggplot2)
   availFreq = c("clicks", "4k","8k", "12k","16k","20k","24k","28k");
   final_f=paste(availFreq, "_f", sep="")
@@ -63,12 +64,16 @@ ampfit <- function(freq, ID = "NULL", dataFolder ,refFolder){
   
   # set x and y axis base on clicks or tones
   if(freq=="clicks"){
+    #ymin=-5
+    #ymax=8
     my_plot <- my_plot +
-      scale_y_continuous(limits=c(-5,8),name="Amplitude (uV)") +
+      scale_y_continuous(limits=c(ymin,ymax), breaks= c(seq(ymin, ymax, by=2)),name="Amplitude (uV)") +
       scale_x_continuous(limits=c(0,90), breaks=c(seq(0, 90, by=20)),name="Sound level (dB)") 
   }else{
+    #ymin = -1
+    #ymax=3
     my_plot<- my_plot +
-      scale_y_continuous(limits=c(-1,3),name="Amplitude (uV)") +
+      scale_y_continuous(limits=c(ymin,ymax), breaks= c(seq(ymin, ymax, by=2)),name="Amplitude (uV)") +
       scale_x_continuous(limits=c(0,90), breaks=c(seq(0, 90, by=20)),name="Sound level (dB)") 
   }
  ##
@@ -79,9 +84,13 @@ ampfit <- function(freq, ID = "NULL", dataFolder ,refFolder){
     test_amp_diff <- IDdata_int$V1.uv. - IDdata_int$V2.uv.
     IDdata <- data.frame(IDdata_int$Level.dB., test_amp_diff)
   }
+   # plots ref data points if points = TRUE
+   if(points==TRUE){
+     my_plot <- my_plot + geom_point(size=3) 
+   }
   # plots ID of interest if ID is !NULL
   if(!is.null(ID)){
-    my_plot <- my_plot + geom_point(size=3) +
+    my_plot <- my_plot +
       geom_point(data= IDdata,aes(IDdata_int.Level.dB., test_amp_diff), size=3, colour="red")
   }
   
