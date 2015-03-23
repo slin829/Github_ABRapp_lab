@@ -20,6 +20,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   #
   refFolder = "ABR_standards";
   newFolder = "ABR_ID"; # TODO make it parameters
+  availf = c("clicks", "4k","8k", "12k","16k","20k","24k","28k");
   
   
   # Load the data set to compare with

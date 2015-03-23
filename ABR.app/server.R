@@ -7,9 +7,9 @@ Dir=sub("/ABR.app", "", Dir)
 #Dir= "C:/Users/clin181/Desktop/PhD/Data Analysis/2015/R"
 setwd(Dir)
 
-source(paste(Dir,'/latency_fit.R', sep=""))
-source(paste(Dir,'/amplitude_fit.R', sep=""))
-source(paste(Dir,'/createSummary.R', sep=""))
+source(paste(Dir,'/funs/latency_fit.R', sep=""))
+source(paste(Dir,'/funs/amplitude_fit.R', sep=""))
+source(paste(Dir,'/funs/createSummary.R', sep=""))
 
 # Define server logic required 
 shinyServer(function(input, output) {
@@ -36,7 +36,7 @@ shinyServer(function(input, output) {
   
   # Plot summary results
   output$summary <- function(){
-    summary = createSummary(1,2);
+    summary = createSummary(refDataID="ABR_RZ6_C57 (heating)", newDataFolder="abr_data_shelly", newDataID="A1101");
     res = summary$res;
     
     # create the message to display
