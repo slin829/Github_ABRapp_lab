@@ -18,9 +18,9 @@ shinyServer(function(input, output) {
     radioButtons("ID", label = "ID", choices = c("NULL", avail_id), inline=TRUE ) 
   })
   
-  # Plot frequency fitting
+  # Plot latency fitting
   output$Plot <- renderPlot(
-    expr=latfit(input$freq, input$ID, input$folder, input$system),
+    expr=latfit(input$freq, input$ID, input$folder, input$system, input$ymin, input$ymax, input$points),
     width=800,
     height=600,
     res=72
@@ -28,7 +28,7 @@ shinyServer(function(input, output) {
   
   # Plot amplitude fitting
   output$Plot_amp <- renderPlot(
-    expr=ampfit(input$freq, input$ID, input$folder, input$system),
+    expr=ampfit(input$freq, input$ID, input$folder, input$system, input$ymin, input$ymax,input$points),
     width=800,
     height=600,
     res=72

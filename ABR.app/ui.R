@@ -81,15 +81,18 @@ shinyUI(fluidPage(
   #
   # choose the displayed frequency, data set to analyse and reference data set 
   #
+  
   sidebarPanel(position = "left",
                selectInput("freq", label = "Frequency",
                            choices =  availf, selected = "clicks"),
-               #radioButtons("ID", label = "ID",
-               #choices = c("NULL", avail_id), inline=TRUE ),
                uiOutput("selectID"),
+               checkboxInput("points", label = "Show all data points", FALSE),
                selectInput("system", label="Select system folder:", choices=avail_system),
-               selectInput("folder", label="Select data folder:", choices=avail_folder )
+               selectInput("folder", label="Select data folder:", choices=avail_folder ),
+               numericInput("ymax", label = "y-max", value= 8),
+               numericInput("ymin", label = "y-min", value= 0)
   ), # end sidebarPanel
+  
   
   #
   # Show plots

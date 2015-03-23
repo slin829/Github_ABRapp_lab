@@ -1,0 +1,19 @@
+Error at starting:
+Listening on http://127.0.0.1:6045
+Error in if (ID == "NULL") { : argument is of length zero
+Warning in run(timeoutMs) :
+  predictions on current data refer to _future_ responses
+
+
+============================================================================================================
+
+Error if no clicks
+Summary
+
+
+Plot error in box
+
+
+Removing black dots (check box) --- DONE
+
+Add control for y axis -- DONE
