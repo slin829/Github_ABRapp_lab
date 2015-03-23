@@ -18,7 +18,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   
   
   # Initiate the output
-  summary <- list(result="noDataSelected", freqProb=c(), noData=c(), metric=.95); 
+  summary <- list(result="", freqProb=c(), noData=c(), metric=Inf); 
   
   #
   # init
@@ -31,7 +31,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   # Load the data set to compare with
   if( is.null(newDataID) || is.null(newDataFolder) ){
     # No data to compare with
-    summary <- list(result="noData", freqProb=c(), noData = availf, metric=Inf); 
+    summary <- list(result="noDataSelected", freqProb=c(), noData = availf, metric=Inf); 
     return( summary );
   }else{
     newData <- load_data( paste0(getwd(),"/",newFolder,"/",newDataFolder,"/",newDataID) );
@@ -49,14 +49,38 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
     if( sum(refData$freq_name == freq) == 0 || sum(newData$freq_name ==  freq) == 0 ){
       # we can't compare since one of the data set doesn't contain the frequency
       summary$noData[length(summary$noData)+1] = freq;
-    }
     
-    # compare the amplitude
+    }else{
+      # extract the information to compare
+      ind = 0; i=1;
+      for( f in refData$freq_name ){
+        if( f == freq ){
+          ind = i;
+        }
+        i = i + 1;
+      }
+      refVal = refData$val[ind];
+      ref_amp_diff <- refVal[[1]][,"Peak_amp"]-refVal[[1]][,"Trough_amp"];
+      ref_lat <- refVal[[1]][,"Peak_lat"];
+      
+      ind = 0; i=1;
+      for( f in newData$freq_name ){
+        if( f == freq ){
+          ind = i;
+        }
+        i = i + 1;
+      }
+      newVal = refData$val[ind];
+      val_amp_diff <- newVal[[1]][,"Peak_amp"]-newVal[[1]][,"Trough_amp"];
+      new_lat <-newVal[[1]][,"Peak_lat"];
+      
+      # compare the amplitude
+      
+      
+      # compare the frequencies
     
-    # compare the frequencies
-    
+    }# end else
   }
   
   return( summary );
-  
 }
