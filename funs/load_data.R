@@ -21,7 +21,10 @@ load_data <- function(path_to_folder, recursive=FALSE){
   }
   
   # parse each animal folder, find frequency files
-  i = 0; last_i = 0;
+  if( recursive ){ i = 1;}
+  else {i = 0;}
+  
+  last_i = 0;
   for( f in availf ){
     
     Data = vector();
