@@ -29,7 +29,7 @@ load_data <- function(path_to_folder, recursive=FALSE){
     for( fold in animal_folders ){
       
       if( (paste0(f,ext)) %in% dir(paste0(path_to_folder,"/",fold)) ){
-          print( paste0("Ready to do ", fold, " and frequence ", f) );
+          #print( paste0("Ready to do ", fold, " and frequence ", f) );
           # there is a file for this frequency
           d = read.csv(paste0(path_to_folder,"/",fold,"/",f,ext), header=TRUE);
           d = cbind(d$Sub..ID, d$Level.dB., d$T1.ms., d$V1.uv., d$T2.ms., d$V2.uv.);

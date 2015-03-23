@@ -9,7 +9,7 @@
 
 ampfit <- function(freq, ID = "NULL", dataFolder ,refFolder){
   library(ggplot2)
-  availFreq = c("clicks", "4k","8k", "12k","16k","20k","24k","28k")
+  availFreq = c("clicks", "4k","8k", "12k","16k","20k","24k","28k");
   final_f=paste(availFreq, "_f", sep="")
   if(freq %in% final_f){
     stop("NB:Do not read from final ABR -- kanamycin treatment will skew the standardised data")

@@ -3,13 +3,16 @@ library(shiny)
 library(ggplot2)
 
 Dir= getwd()
-Dir=sub("/ABR.app", "", Dir)
-#Dir= "C:/Users/clin181/Desktop/PhD/Data Analysis/2015/R"
-setwd(Dir)
 
 source(paste(Dir,'/funs/latency_fit.R', sep=""))
 source(paste(Dir,'/funs/amplitude_fit.R', sep=""))
 source(paste(Dir,'/funs/createSummary.R', sep=""))
+
+Dir=sub("/ABR.app", "", Dir)
+#Dir= "C:/Users/clin181/Desktop/PhD/Data Analysis/2015/R"
+setwd(Dir)
+
+
 
 # Define server logic required 
 shinyServer(function(input, output) {
