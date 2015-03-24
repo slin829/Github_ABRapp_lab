@@ -40,6 +40,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   # Load the reference data set
   refData <- load_data( paste0(getwd(),"/",refFolder,"/",refDataID) , TRUE);
   
+  #print(refData)
   
   #
   # Compare each frequency of the newData to the reference prediction interval
@@ -52,31 +53,50 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
     
     }else{
       # extract the information to compare
-      ind = 0; i=1;
+      # amp
+      indR = 0; i=1;
       for( f in refData$freq_name ){
         if( f == freq ){
-          ind = i;
+          indR = i;
         }
         i = i + 1;
       }
-      refVal = refData$val[ind];
+      refVal = refData$val[indR];
       ref_amp_diff <- refVal[[1]][,"Peak_amp"]-refVal[[1]][,"Trough_amp"];
+      refVal[[1]] <- cbind(refVal[[1]], ref_amp_diff)
+      refVal[[1]] <- na.omit(refVal[[1]])
       ref_lat <- refVal[[1]][,"Peak_lat"];
+      ref_sound_level <- refVal[[1]]$Sound_level;
       
-      ind = 0; i=1;
+      # freq
+      indN = 0; i = 1;
       for( f in newData$freq_name ){
         if( f == freq ){
-          ind = i;
+          indN = i;
         }
         i = i + 1;
       }
-      newVal = refData$val[ind];
+      newVal = refData$val[indN];
       val_amp_diff <- newVal[[1]][,"Peak_amp"]-newVal[[1]][,"Trough_amp"];
       new_lat <-newVal[[1]][,"Peak_lat"];
       
       # compare the amplitude
+      print(paste("freq:", freq, "ind-", indR, ":" ))
+#      print(ref_sound_level);
+#      print("----------------")
+#      print(ref_amp_diff)
+#      print("----------------")
       
+      MyMod <- lm(ref_amp_diff ~ poly(ref_sound_level, 2), data=refVal)
+      prediction_amp <-predict(MyMod, interval="prediction", level=0.95)
       
+      #print(class(prediction_amp))
+      #print( prediction_amp[,"upr"] )
+      print( ks.test(val_amp_diff, prediction_amp[,"upr"], alternative="less"  ) )
+      print( ks.test(val_amp_diff, prediction_amp[,"lwr"], alternative="greater"  ) ) 
+      print("----------------")
+      print( paste("nbr of points outside the prediction: ", sum((val_amp_diff > prediction_amp[,"upr"] ) | (val_amp_diff < prediction_amp[,"lwr"]) )) )
+      print("-------------------------------------------")
       # compare the frequencies
     
     }# end else
