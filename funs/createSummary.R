@@ -37,6 +37,8 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
     newData <- load_data( paste0(getwd(),"/",newFolder,"/",newDataFolder,"/",newDataID) );
   }
   
+  #print(newData)
+  
   # Load the reference data set
   refData <- load_data( paste0(getwd(),"/",refFolder,"/",refDataID) , TRUE);
   
@@ -61,12 +63,12 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
         }
         i = i + 1;
       }
-      refVal = refData$val[indR];
-      ref_amp_diff <- refVal[[1]][,"Peak_amp"]-refVal[[1]][,"Trough_amp"];
-      refVal[[1]] <- cbind(refVal[[1]], ref_amp_diff)
-      refVal[[1]] <- na.omit(refVal[[1]])
-      ref_lat <- refVal[[1]][,"Peak_lat"];
-      ref_sound_level <- refVal[[1]]$Sound_level;
+      refVal = refData$val[[indR]];
+      ref_amp_diff <- refVal[,"Peak_amp"]-refVal[,"Trough_amp"];
+      refVal <- cbind(refVal, ref_amp_diff)
+      refVal <- na.omit(refVal)
+      ref_lat <- refVal[,"Peak_lat"];
+      ref_sound_level <- refVal$Sound_level;
       
       # freq
       indN = 0; i = 1;
@@ -76,29 +78,60 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
         }
         i = i + 1;
       }
-      newVal = refData$val[indN];
-      val_amp_diff <- newVal[[1]][,"Peak_amp"]-newVal[[1]][,"Trough_amp"];
-      new_lat <-newVal[[1]][,"Peak_lat"];
+      newVal = newData$val[[indN]];
       
-      # compare the amplitude
+      new_amp_diff <- newVal[,"Peak_amp"]-newVal[,"Trough_amp"];
+      new_lat <-newVal[,"Peak_lat"];
+      
+      # Prediction and confidences
       print(paste("freq:", freq, "ind-", indR, ":" ))
-#      print(ref_sound_level);
+#      print(refVal);
 #      print("----------------")
-#      print(ref_amp_diff)
+#      print(newVal)
 #      print("----------------")
+     
       
       MyMod <- lm(ref_amp_diff ~ poly(ref_sound_level, 2), data=refVal)
       prediction_amp <-predict(MyMod, interval="prediction", level=0.95)
       
-      #print(class(prediction_amp))
-      #print( prediction_amp[,"upr"] )
-      print( ks.test(val_amp_diff, prediction_amp[,"upr"], alternative="less"  ) )
-      print( ks.test(val_amp_diff, prediction_amp[,"lwr"], alternative="greater"  ) ) 
-      print("----------------")
-      print( paste("nbr of points outside the prediction: ", sum((val_amp_diff > prediction_amp[,"upr"] ) | (val_amp_diff < prediction_amp[,"lwr"]) )) )
-      print("-------------------------------------------")
-      # compare the frequencies
-    
+      MyMod <- lm(refVal$Peak_lat~ poly(refVal$Sound_level,2), data= refVal)
+      prediction_freq <- predict(MyMod, interval="prediction", level=0.95)
+
+      metric_amp = 0;
+      N_outside_amp = 0;
+      for( i in 1:length(new_amp_diff) ){
+        if( !is.null( newVal[i,"Sound_level"] ) && !is.na( newVal[i,"Sound_level"] ) ){
+          
+  #        print(paste(i," - ", new_amp_diff[i], newVal[i,"Sound_level"]))
+          id = which( refVal$Sound_level %in% newVal[i,"Sound_level"] )
+#          print( id )
+          
+          # if we found a corresponding frequency in the refData
+          if( length(id) > 0 ){
+    #        print( paste("\t", refVal[id[1],"Sound_level"], " lwr:", prediction_amp[id[1],"lwr"], " upr:", prediction_amp[id[1],"upr"] ) )
+            
+            # find the closet bound
+            comp = prediction_amp[id[1],"upr"];
+#            print(paste(A1, "vs", A2))        
+            if(  abs(prediction_amp[id[1],"lwr"] - new_amp_diff[i]) < abs(prediction_amp[id[1],"upr"] - new_amp_diff[i]) ){
+              comp = prediction_amp[id[1],"lwr"];
+            }
+            
+            # update the metric
+            metric_amp = metric_amp + ( (new_amp_diff[i] - comp)^2 )
+            if( (prediction_amp[id[1],"lwr"] > new_amp_diff[i])  || (prediction_amp[id[1],"upr"] < new_amp_diff[i]) ){
+              N_outside_amp = N_outside_amp + 1;
+              print(paste(newVal[i,"Sound_level"], "dB", " +++ ", "amp diff: ", new_amp_diff[i], " --- ", "prediction-lwr: ", prediction_amp[id[1],"lwr"], " - ", (prediction_amp[id[1],"lwr"] < new_amp_diff[i]), "/" , " prediction-upr: ", prediction_amp[id[1],"upr"], " - ", (prediction_amp[id[1],"upr"] > new_amp_diff[i])))
+            }
+          }
+  
+        }# if is null
+      } #end for i
+
+      print( paste("metric:", metric_amp, "N outside:", N_outside_amp) )
+
+print("-------------------------------------------")
+
     }# end else
   }
   
