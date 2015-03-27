@@ -39,27 +39,38 @@ shinyServer(function(input, output) {
   
   # Plot summary results
   output$summary <- function(){
-    summary = createSummary(refDataID="ABR_RZ6_C57 (heating)", newDataFolder="abr_data_shelly", newDataID="A1101");
+    summary = createSummary(refDataID=input$system, newDataFolder=input$folder, newDataID=input$ID);
     res = summary$res;
     
     # create the message to display
     msg = "";    
     if( res == "OK"){
-      msg = paste("Data fits in the prediction with metric=", summary$metric  , ". :)");
-    }else{
-      msg = paste("Some data don't fit in the prediction interval, metric=" , summary$metric , ". You should have a look on: [" );
+      msg = paste("Data fits in the prediction. :)");
+    
+    
+    }else if( res == "KO"){
+        
+      msg = paste("Some data don't fit in the prediction intervals. You should have a look on:" );
  
       for( i in 1:length(summary$freqProb) ){
         f = summary$freqProb[i];
-        msg = paste0( msg, f );
-        print(msg)
+        id = which( f %in% summary$foundFreq );
+        print(paste(f, summary$foundFreq))
+        print("-------")
+        print(id); 
+        print(summary$metric$nAmp[id])
+        msg = paste0( msg, f, " #Points outside prediction:(amp: ", summary$metric$nAmp[id], " lat:", summary$metric$nLat[id], ")");
+        #print(msg)
         if( i < length(summary$freqProb) ){
-          msg = paste0(msg, ", ")
+          msg = paste0(msg, "\n")
         }else{
-          msg = paste0(msg,"].")
+          msg = paste0(msg)
         }
       }
-    }
+    
+    }else{
+      msg = "No data selected."
+    }# end if else TODO: change to switch case
     
     return(msg);
   } 

@@ -19,7 +19,7 @@ ampfit <- function(freq, ID = "NULL", dataFolder , refFolder,  ymin, ymax, point
     stop("Frequency not available")
   }
   
-  if(ID=="NULL"){
+  if((ID=="NULL") || is.null(ID)){
     ID=NULL
   }
   
