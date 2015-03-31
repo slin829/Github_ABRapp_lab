@@ -56,9 +56,9 @@ shinyServer(function(input, output) {
         f = summary$freqProb[i];
         id = which( f %in% summary$foundFreq );
         print(paste(f, summary$foundFreq))
-        print("-------")
-        print(id); 
-        print(summary$metric$nAmp[id])
+        #print("-------")
+        #print(id); 
+        #print(summary$metric$nAmp[id])
         msg = paste0( msg, f, " #Points outside prediction:(amp: ", summary$metric$nAmp[i], " lat:", summary$metric$nLat[i], ")");
         #print(msg)
         if( i < length(summary$freqProb) ){

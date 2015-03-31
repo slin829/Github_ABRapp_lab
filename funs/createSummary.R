@@ -27,7 +27,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   newFolder = "ABR_ID"; # TODO make it parameters
   availf = c("clicks", "4k","8k", "12k","16k","20k","24k","28k");
   
-  print( paste("inputs: id_f=", refDataID, " data=", newDataFolder, " id_d=", newDataID) )
+  #print( paste("inputs: id_f=", refDataID, " data=", newDataFolder, " id_d=", newDataID) )
   
   
   # Load the data set to compare with
@@ -51,7 +51,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   N_outside_lat = c();
   for( freq in availf ){
     
-    print(paste0(">> F: ", freq))
+    #print(paste0(">> F: ", freq))
     
     if( sum(refData$freq_name == freq) == 0 || sum(newData$freq_name ==  freq) == 0 ){
       # we can't compare since one of the data set doesn't contain the frequency
@@ -126,7 +126,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
             metric_amp[length(metric_amp)] = metric_amp[length(metric_amp)] + ( (new_amp_diff[i] - comp)^2 );
             if( (prediction_amp[id[1],"lwr"] > new_amp_diff[i])  || (prediction_amp[id[1],"upr"] < new_amp_diff[i]) ){
               N_outside_amp[length(N_outside_amp)] = N_outside_amp[length(N_outside_amp)] + 1;
-                            print(paste("AMP:", newVal[i,"Sound_level"], "dB", " +++ ", "amp diff: ", new_amp_diff[i], " --- ", "prediction-lwr: ", prediction_amp[id[1],"lwr"], " - ", (prediction_amp[id[1],"lwr"] < new_amp_diff[i]), "/" , " prediction-upr: ", prediction_amp[id[1],"upr"], " - ", (prediction_amp[id[1],"upr"] > new_amp_diff[i])))
+              #print(paste("AMP:", newVal[i,"Sound_level"], "dB", " +++ ", "amp diff: ", new_amp_diff[i], " --- ", "prediction-lwr: ", prediction_amp[id[1],"lwr"], " - ", (prediction_amp[id[1],"lwr"] < new_amp_diff[i]), "/" , " prediction-upr: ", prediction_amp[id[1],"upr"], " - ", (prediction_amp[id[1],"upr"] > new_amp_diff[i])))
             }
             
             
@@ -141,7 +141,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
             
             if( (prediction_lat[id[1],"lwr"] > new_lat[i])  || (prediction_lat[id[1],"upr"] < new_lat[i]) ){
               N_outside_lat[length(N_outside_lat)] = N_outside_lat[length(N_outside_lat)] + 1;
-                            print(paste("LAT:", newVal[i,"Sound_level"], "dB", " +++ ", "amp diff: ", new_amp_diff[i], " --- ", "prediction-lwr: ", prediction_amp[id[1],"lwr"], " - ", (prediction_amp[id[1],"lwr"] < new_amp_diff[i]), "/" , " prediction-upr: ", prediction_amp[id[1],"upr"], " - ", (prediction_amp[id[1],"upr"] > new_amp_diff[i])))
+              #print(paste("LAT:", newVal[i,"Sound_level"], "dB", " +++ ", "amp diff: ", new_amp_diff[i], " --- ", "prediction-lwr: ", prediction_amp[id[1],"lwr"], " - ", (prediction_amp[id[1],"lwr"] < new_amp_diff[i]), "/" , " prediction-upr: ", prediction_amp[id[1],"upr"], " - ", (prediction_amp[id[1],"upr"] > new_amp_diff[i])))
             }
             
           } # end if length(id)
@@ -168,10 +168,10 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
     # if some points are outside for some frequency -> add in freqProb
     i = 1;
     for( f in summary$foundFreq ){
-      print(paste0("++F= ", summary$metric$nAmp[i], " == ", summary$metric$nLat[i] ))
+      #print(paste0("++F= ", summary$metric$nAmp[i], " == ", summary$metric$nLat[i] ))
       if( summary$metric$nAmp[i] > 0 || summary$metric$nLat[i] > 0 ){
         summary$freqProb[length(summary$freqProb)+1] = f;
-        print(summary$freqProb)
+        #print(summary$freqProb)
       }
       i = i + 1;  
     }
@@ -185,7 +185,7 @@ createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" )
   
   
   
-  print(summary)
+  #print(summary)
   
   
   return( summary );
