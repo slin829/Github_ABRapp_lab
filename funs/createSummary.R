@@ -14,6 +14,7 @@
 
 createSummary <- function( refDataID, newDataFolder="NULL", newDataID = "NULL" ){
   Dir= getwd();
+  Dir=sub("/ABR.app", "", Dir)
   source(paste0(Dir,'/funs','/load_data.R'));
   
   
