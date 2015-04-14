@@ -83,6 +83,7 @@ shinyUI(fluidPage(
   #
   
   sidebarPanel(position = "left",
+               radioButtons("species", label=" Select animal species", choices= c("Mice/Rats", "Guinea Pigs", "Others")),
                uiOutput("selectFreq"),    
                uiOutput("selectID"),
                checkboxInput("points", label = "Show all data points", FALSE),

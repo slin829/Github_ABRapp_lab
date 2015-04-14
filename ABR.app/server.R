@@ -21,13 +21,22 @@ shinyServer(function(input, output) {
     radioButtons("ID", label = "ID", choices = c(avail_id), selected="NULL", inline=TRUE ) 
   })
   
-  # select Freq according to availability in the ID folder
-  output$selectFreq <- renderUI({
-    path=paste0(Dir,"/ABR_ID/", input$folder,"/", input$ID)
-    availf <- list.files(path=path ,pattern = "\\.csv$")
-    availf <- sub(".csv", "", availf)
-    selectInput("freq", label = "Frequency", choices =  availf, selected = "clicks")
+  # select Freq according to species
+  output$selectFreq<- renderUI({
+    if(input$species == "Mice/Rats"){
+      availf <- c("clicks", "4k", "8k", "12k", "16k", "20k", "24k", "28k")
+      radioButtons("freq", label = "Frequency", choices =  availf, selected = "clicks",inline=TRUE)
+    }else if(input$species == "Guinea Pigs"){
+      availf <- c("clicks", "1k", "2k", "4k", "8k",  "16k", "32k")
+      radioButtons("freq", label = "Frequency", choices =  availf, selected = "clicks",inline=TRUE)
+    }else if(input$species == "Others"){
+      radioButtons("freq", label = "Frequencies", 
+                                       choices= c("clicks", "1k", "2k", "4k", "8k", "12k", "16k", "20k", "24k", "28k", "32k"), 
+                                       inline=TRUE)
+    }
+    
   })
+
   
   # Plot latency fitting
   output$Plot <- renderPlot(
