@@ -1,4 +1,4 @@
-# ABR_latency
+# ABR_app
 library(shiny)
 library(ggplot2)
 
@@ -7,7 +7,7 @@ Dir=sub("/ABR.app", "", Dir)
 #Dir= "C:/Users/clin181/Desktop/PhD/Data Analysis/2015/R"
 setwd(Dir)
 
-availf = c("clicks", "4k","8k", "12k","16k","20k","24k","28k")
+#availf = c("clicks", "4k","8k", "12k","16k","20k","24k","28k")
 avail_system= dir("./ABR_standards")
 avail_folder = dir("./ABR_ID")
 
@@ -83,8 +83,7 @@ shinyUI(fluidPage(
   #
   
   sidebarPanel(position = "left",
-               selectInput("freq", label = "Frequency",
-                           choices =  availf, selected = "clicks"),
+               uiOutput("selectFreq"),    
                uiOutput("selectID"),
                checkboxInput("points", label = "Show all data points", FALSE),
                selectInput("system", label="Select system folder:", choices=avail_system),

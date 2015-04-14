@@ -1,4 +1,4 @@
-# ABR_latency
+# ABR_app
 library(shiny)
 library(ggplot2)
 
@@ -18,7 +18,15 @@ setwd(Dir)
 shinyServer(function(input, output) {
   output$selectID <- renderUI({
   avail_id <- dir(paste0("./ABR_ID/", input$folder))
-    radioButtons("ID", label = "ID", choices = c("NULL", avail_id), inline=TRUE ) 
+    radioButtons("ID", label = "ID", choices = c(avail_id), selected="NULL", inline=TRUE ) 
+  })
+  
+  # select Freq according to availability in the ID folder
+  output$selectFreq <- renderUI({
+    path=paste0(Dir,"/ABR_ID/", input$folder,"/", input$ID)
+    availf <- list.files(path=path ,pattern = "\\.csv$")
+    availf <- sub(".csv", "", availf)
+    selectInput("freq", label = "Frequency", choices =  availf, selected = "clicks")
   })
   
   # Plot latency fitting
