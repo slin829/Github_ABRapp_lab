@@ -86,8 +86,8 @@ shinyUI(fluidPage(
                radioButtons("species", label=" Select animal species", choices= c("Mice/Rats", "Guinea Pigs")),
                uiOutput("selectFreq"),    
                uiOutput("selectID"),
-               checkboxInput("points", label = "Show all data points", FALSE),
                selectInput("system", label="Select system folder:", choices=avail_system),
+               checkboxInput("points", label = "Show all data points", FALSE),
                selectInput("folder", label="Select data folder:", choices=avail_folder ),
                numericInput("ymax", label = "y-max", value= 8),
                numericInput("ymin", label = "y-min", value= 0)
