@@ -18,7 +18,7 @@ setwd(Dir)
 shinyServer(function(input, output) {
   output$selectID <- renderUI({
   avail_id <- dir(paste0("./ABR_ID/", input$folder))
-    radioButtons("ID", label = "ID", choices = c(avail_id), selected="NULL", inline=TRUE ) 
+    radioButtons("ID", label = "ID", choices = c("NULL", avail_id), selected="NULL", inline=TRUE ) 
   })
   
   # select Freq according to species
@@ -29,10 +29,6 @@ shinyServer(function(input, output) {
     }else if(input$species == "Guinea Pigs"){
       availf <- c("clicks", "1k", "2k", "4k", "8k",  "16k", "32k")
       radioButtons("freq", label = "Frequency", choices =  availf, selected = "clicks",inline=TRUE)
-    }else if(input$species == "Others"){
-      radioButtons("freq", label = "Frequencies", 
-                                       choices= c("clicks", "1k", "2k", "4k", "8k", "12k", "16k", "20k", "24k", "28k", "32k"), 
-                                       inline=TRUE)
     }
     
   })
