@@ -14,9 +14,9 @@ latfit <- function(freq, ID="NULL", dataFolder, refFolder,  ymin= 0, ymax= 8, po
   if(freq %in% final_f){
     stop("NB:Do not read from final ABR -- kanamycin treatment will skew the standardised data")
   }
-  if(!freq %in% availFreq){
-    stop("Frequency not available")
-  }
+  #if(!freq %in% availFreq){
+  #  stop("Frequency not available")
+  #}
   if(ID=="NULL"){
     ID=NULL
   }
