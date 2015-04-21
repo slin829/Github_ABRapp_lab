@@ -1,19 +1,32 @@
-Error at starting:
-Listening on http://127.0.0.1:6045
-Error in if (ID == "NULL") { : argument is of length zero
-Warning in run(timeoutMs) :
-  predictions on current data refer to _future_ responses
+Summary problems
+- points outside prediction do not match with graph (shifted?) and missing freq summary @ 8k and 28k 
+	ID: A1123
+	system folder: ABR_RZ6_C57 (heating)
+	data folder: abr_data_shelly (heating)
+- create data.frame for summary result and print to app with renderTable
 
 
-============================================================================================================
 
-Error if no clicks
-Summary
+Different freqs for different animal species
+- create checkboxes for selection of freqs to be tested
+- make error messages more specific e.g missing files or freq not available etc 
+	ID: A1223
+	system folder: ABR_RZ6_C57 (heating)
+	data folder: abr_data_shelly (heating)
 
 
-Plot error in box
+Tidy data
+- check NA values are handelled appropriately
+- check 0 values are removed before analysis
+  (generated automatically from missing curser/s in BioSig)
 
 
-Removing black dots (check box) --- DONE
 
-Add control for y axis -- DONE
+Blank .csv files in system folder will halt the application
+- print appropriate error message
+
+
+
+.csv files in system folder with insufficiant info (# of columns) also halts the application
+- usually a result of using the wrong templte during output from BioSig
+- print appropriate error message
